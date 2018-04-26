@@ -5,6 +5,7 @@ from alexnet import AlexNet
 import numpy as np
 from sklearn.utils import shuffle
 import os, json
+import time
 
 nb_classes = 43
 learning_rate = 1e-3
@@ -82,8 +83,10 @@ def train_model(X_, y_, X_val, y_val,
 					num_examples = len(X_train)
 					print("Training...{}".format(model_name))
 					print()
+					t= time.time()
 					for i in range(EPOCHS):
 						X_train, y_train = shuffle(X_train, y_train)
+						t = time.time()
 
 						for offset in range(0, num_examples, batch_size):
 							end = offset + batch_size
@@ -98,6 +101,7 @@ def train_model(X_, y_, X_val, y_val,
 						saver.save(sess, os.path.join(saving_path, model_name, 'model'), global_step=i+1)
 					with open(os.path.join(saving_path, model_name, 'train_stats.json'), 'w') as f:
 						json.dump(train_stats, f)
+					print('Training time: {}'.format(time.time()-t))
 					print('------------------------\n')
 
 
